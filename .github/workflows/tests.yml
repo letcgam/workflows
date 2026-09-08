@@ -1,0 +1,35 @@
+name: PHP Tests
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - master
+  push:
+    branches:
+      - develop
+      - master
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: mbstring, xml, intl, mysqli
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist --no-interaction
+
+      - name: Run PHP lint
+        run: find . -name "*.php" -not -path "./vendor/*" -print0 | xargs -0 -n1 -P4 php -l
+
+      - name: Run unit tests
+        run: composer test:coverage
