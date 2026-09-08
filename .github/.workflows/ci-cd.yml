@@ -1,12 +1,9 @@
 name: CI/CD
 
 on:
-  push:
-    branches:
-      - chore/ci-cd
   pull_request:
     branches:
-      - chore/ci-cd
+      - master
 
 jobs:
   build-and-test:
